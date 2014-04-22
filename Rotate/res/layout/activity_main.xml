@@ -6,30 +6,35 @@
     tools:context="com.example.rotate.MainActivity"
     tools:ignore="MergeRootFrame" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="match_parent" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/highScoreButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="High Score" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/playButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Play" />
+
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/playButton"
+            android:layout_alignParentBottom="true"
             android:text="Exit" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>
 
