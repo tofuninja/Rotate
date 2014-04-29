@@ -1,0 +1,26 @@
+package com.example.rotate;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.view.View;
+
+public class gameView extends View 
+{
+
+	public gameView(Context context) 
+	{
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
+
+	
+	@Override
+	protected void onDraw(Canvas g) {
+		// TODO Auto-generated method stub
+		super.onDraw(g);
+		int w = g.getWidth();
+		int h = g.getHeight();
+		
+		
+	}
+}

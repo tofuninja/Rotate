@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.os.Build;
 
@@ -34,14 +35,18 @@ public class MainActivity extends ActionBarActivity {
         
         // Set button stuff
         
-        Button button = (Button) findViewById(R.id.playButton);
- 
+        Button button = (Button) findViewById(R.id.button_play);
+        
+        
+        
         button.setOnClickListener(new OnClickListener()
         {
           public void onClick(View v)
           {
         	  // doStuff
-        	  setContentView(R.layout.game_screen);
+        	  setContentView(R.layout.gamescreen);
+        	  FrameLayout gameLayout = (FrameLayout) findViewById(R.id.game_layout);
+        	  gameLayout.addView(new gameView(getApplicationContext()));
           }
         });
         
