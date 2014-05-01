@@ -7,9 +7,10 @@ public class SQLconnector{
 	private static Connection getConnection() throws SQLException, IOException
 	{
 		Properties props = new Properties();
-		FileInputStream in = new FileInputStream("database.properties");
+		FileInputStream in = new FileInputStream("C:/Users/chen1123/workspace/SQLconnector/src/database.properties");
 		props.load(in);
 		in.close();
+		
 		String drivers = props.getProperty("jdbc.drivers");
 		if (drivers != null)
 			System.setProperty("jdbc.drivers", drivers);
@@ -27,29 +28,28 @@ public class SQLconnector{
 		try {
 			conn = getConnection();
 			Statement stat = conn.createStatement();
-			stat.executeUpdate("INSERT INTO HighScore VALUES" + "('" + name + 
-					"'0','0000-00-00'");
-		} catch (Exception e) {}
+			stat.executeUpdate("INSERT INTO HighScore VALUES (\"" + name + "\", \"0\", \"0000-00-00\");");
+		} catch (Exception e) {e.printStackTrace();}
 	}
 
-	public static void updateNewPlayer (String name, int totalScore, String date) {
+	public static void updatePlayer (String name, int totalScore, String date) {
 		Connection conn = null;
 		try {
 			conn = getConnection();
 			Statement stat = conn.createStatement();
-			stat.executeUpdate("UPDATE HighScore set HighScores=" + totalScore + " where Players=" + name);
-			stat.executeUpdate("UPDATE HighScore set DateCreated=" + date + " where Players=" + name);
-		} catch (Exception e) {}
+			stat.executeUpdate("UPDATE HighScore SET highscores=\"" + totalScore + "\" WHERE name=\"" + name + "\";");
+			stat.executeUpdate("UPDATE HighScore SET datecreated=\"" + date + "\" WHERE name=\"" + name + "\";");
+		} catch (Exception e) {e.printStackTrace();}
 	}
-	
-	
+
+
 	public static void getTop10Players () {
 		Connection conn = null;
 		try {
 			conn = getConnection ();
 			Statement stat = conn.createStatement();
 			ResultSet result = stat.executeQuery("SELECT * FROM HighScore ORDER BY HighScores DESC");
-			
+
 			while (result.next()){
 				System.out.print(result.getString(1)+"|");
 			}
