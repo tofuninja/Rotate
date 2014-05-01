@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
 
@@ -8,9 +9,11 @@ public class SQLconnector{
 	{
 		Properties props = new Properties();
 		FileInputStream in = new FileInputStream("C:/Users/chen1123/workspace/SQLconnector/src/database.properties");
+		System.out.println("C:/Users/chen1123/workspace/SQLconnector/src");
+		System.out.println(Paths.get("").toAbsolutePath().toString());
 		props.load(in);
 		in.close();
-		
+
 		String drivers = props.getProperty("jdbc.drivers");
 		if (drivers != null)
 			System.setProperty("jdbc.drivers", drivers);
@@ -28,7 +31,9 @@ public class SQLconnector{
 		try {
 			conn = getConnection();
 			Statement stat = conn.createStatement();
-			stat.executeUpdate("INSERT INTO HighScore VALUES (\"" + name + "\", \"0\", \"0000-00-00\");");
+			ResultSet result = stat.executeQuery("SELECT * FROM HighScore WHERE name=\"" + name +"\";");
+			if (result.wasNull())
+				stat.executeUpdate("INSERT INTO HighScore VALUES (\"" + name + "\", \"0\", \"0000-00-00\");");
 		} catch (Exception e) {e.printStackTrace();}
 	}
 
@@ -50,9 +55,16 @@ public class SQLconnector{
 			Statement stat = conn.createStatement();
 			ResultSet result = stat.executeQuery("SELECT * FROM HighScore ORDER BY HighScores DESC");
 
+			int columns = result.getMetaData().getColumnCount();
+			StringBuilder message = new StringBuilder();
+
 			while (result.next()){
-				System.out.print(result.getString(1)+"|");
+				for (int i = 1; i <= columns; i++) {
+					message.append(result.getString(i) + " ");
+				}
+				message.append("\n");
 			}
+			System.out.println(message);
 		} catch (Exception e) {}
 	}
 
