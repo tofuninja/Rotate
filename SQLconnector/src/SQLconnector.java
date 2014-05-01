@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SQLconnector{
 
-	public static Connection getConnection() throws SQLException, IOException
+	private static Connection getConnection() throws SQLException, IOException
 	{
 		Properties props = new Properties();
 		FileInputStream in = new FileInputStream("database.properties");
@@ -22,7 +22,7 @@ public class SQLconnector{
 		return DriverManager.getConnection( url, username, password);
 	}
 
-	void createNewPlayer (String name) {
+	public static void createNewPlayer (String name) {
 		Connection conn = null;
 		try {
 			conn = getConnection();
@@ -32,7 +32,7 @@ public class SQLconnector{
 		} catch (Exception e) {}
 	}
 
-	void updateNewPlayer (String name, int totalScore, String date) {
+	public static void updateNewPlayer (String name, int totalScore, String date) {
 		Connection conn = null;
 		try {
 			conn = getConnection();
@@ -43,7 +43,7 @@ public class SQLconnector{
 	}
 	
 	
-	void getTop10Players () {
+	public static void getTop10Players () {
 		Connection conn = null;
 		try {
 			conn = getConnection ();
