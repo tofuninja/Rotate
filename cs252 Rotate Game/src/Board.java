@@ -1,3 +1,5 @@
+package com.example.rotate;
+
 import java.util.*;
 
 public class Board {
@@ -8,7 +10,7 @@ public class Board {
 	static int maxCol;
 	int result1;
 	
-	static Stack pointStack = new Stack();
+	static Stack<Point> pointStack = new Stack<Point>();
 	static int pointStackCount=0;
 	 
 	public void printBoard()
@@ -202,16 +204,16 @@ public class Board {
 	}
 	
 	
-	public int checkIfCorrect(Point [][]board)//should implement a timer later so it's not infinite
+	public boolean checkIfCorrect()//should implement a timer later so it's not infinite
 	{
 		
-		if(1==South(board, board[0][0]))//replace with south function
-			return 1;
+		if(1==South(gameBoard, gameBoard[0][0]))//replace with south function
+			return true;
 		
-		if(1==East(board, board[0][0]))//replace with east function
-			return 1;
+		if(1==East(gameBoard, gameBoard[0][0]))//replace with east function
+			return true;
 		
-		return 0;
+		return false;
 	}
 	
 	public int South(Point [][]board, Point currentPoint)

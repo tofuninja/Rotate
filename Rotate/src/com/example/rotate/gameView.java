@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.renderscript.Matrix2f;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,47 +19,119 @@ public class gameView extends View
 {
 	private Bitmap pipe;
 	private Bitmap pipe_b;
-	
+
 	private int gameWidth;
 	private int gameHeight;
 	
-	private int[][] rotations; 
-	private int[][] types; 
+	private Board board;
+	
+	private gamePiece[][] pieces;
+	
 	public gameView(Context context) 
 	{
 		super(context);
+		
+		
 		pipe = BitmapFactory.decodeResource(getResources(), R.drawable.pipe);
 		pipe_b = BitmapFactory.decodeResource(getResources(), R.drawable.pipe_b);
 		pipe.setDensity(Bitmap.DENSITY_NONE);
 		pipe_b.setDensity(Bitmap.DENSITY_NONE);
-		setGameSize(5,10);
-		p.setColor(Color.BLACK);
+		
+		genNewBoard();
+		
 	}
 	
-	public void setGameSize(int w, int h)
+	private void genNewBoard()
 	{
+		int w = 5; int h = 9;
+		board = new Board(w, h);
+		pieces = new gamePiece[w][h];
 		gameWidth = w;
 		gameHeight = h;
-		rotations = new int[w][h];
-		types = new int[w][h];
 		
-		Random r = new Random();
-		
-		for(int i = 0; i < gameWidth; i++)
-		{
-			for(int j = 0; j < gameHeight; j++)
+		for(int i = 0; i < w; i++)
+			for(int j = 0; j < h; j++)
 			{
-				rotations[i][j] = r.nextInt(4);
-				types[i][j] = r.nextInt(2);
+				pieces[i][j] = crazyToSanity(board.gameBoard[i][j].value);
+				Log.d("ROTATE", "" + board.gameBoard[i][j].value);
 			}
+	}
+	
+	// Used to turn the type and rotation of a game piece in to crazy...
+	private int sanityToCrazy(gamePiece g)
+	{
+		if(g.type == 0)//Strait pipes
+		{
+			if(g.rotation == 0 || g.rotation == 2) 	// ( │ )
+				return 1;
+			else 
+				return 2; 						// ( ─ )
+		}
+		else//Bent
+		{
+			if(g.rotation == 0) 		// ( ┌ )
+				return 6;
+			else if(g.rotation == 1) 	// ( ┐ )
+				return 5;
+			else if(g.rotation == 2) 	// ( ┘ )
+				return 4;
+			else						// ( └ )
+				return 3;
 		}
 	}
-
+	
+	// Makes sense of crazy...
+	private gamePiece crazyToSanity(int crazy)
+	{
+		if(crazy == 1)
+			return new gamePiece(0, 0); // ( │ )
+		else if(crazy == 2)
+			return new gamePiece(0, 1); // ( ─ )
+		else if(crazy == 3)
+			return new gamePiece(1, 3); // ( └ )
+		else if(crazy == 4)
+			return new gamePiece(1, 2); // ( ┘ )
+		else if(crazy == 5)
+			return new gamePiece(1, 1); // ( ┐ )
+		else
+			return new gamePiece(1, 0); // ( ┌ )
+	}
+	
+	private class gamePiece
+	{
+		public int type;
+		public int rotation;
+		public gamePiece(int t, int r)
+		{
+			type = t;
+			rotation = r;
+		}
+	}
+	
+	private static Paint p = new Paint();
+	private static Paint p2 = new Paint();
+	private static Paint p3 = new Paint();
+	
+	static
+	{
+		
+		p2.setColor(Color.DKGRAY);
+		p.setColor(Color.WHITE);
+		p.setTextSize(100);
+		p3.setColor(Color.rgb(100, 100, 255));
+		p3.setStyle(Paint.Style.FILL);
+	}
 	
 	private Matrix m = new Matrix();
-	private Paint p = new Paint();
+	
 	float x_spacing;
 	float y_spacing;
+	
+	
+	int time = 0;
+	int score = 0;
+	float timeLeft = 150;
+	float timeMax = 150;
 	
 	@Override
 	protected void onDraw(Canvas g) 
@@ -66,8 +139,29 @@ public class gameView extends View
 		// TODO Auto-generated method stub
 		super.onDraw(g);
 		int w = g.getWidth();
-		int h = g.getHeight()-10;
+		int h = g.getHeight()-80;
 		g.setDensity(Bitmap.DENSITY_NONE);
+		g.drawRGB(0,0,0);
+		
+		
+		if(timeLeft > timeMax - 0.5f)
+			p2.setColor(Color.RED);
+		else
+			p2.setColor(Color.DKGRAY);
+		
+		float lx = (float)(Math.cos(0)*400 + 300*Math.cos(0)) + w/2;
+		float ly = (float)(Math.sin(0)*400 + 300*Math.sin(0)) + h/2;
+		for(int i = 0; i < 1000; i++)
+		{
+			float px = lx;
+			float py = ly;
+			lx = (float)(Math.cos(i/100.0)*600 + 600*Math.cos(i*Math.sin(time/200.0)*5)) + w/2;
+			ly = (float)(Math.sin(i/100.0)*600 + 600*Math.sin(i*Math.sin(time/200.0)*5)) + h/2;
+			g.drawLine(px, py, lx, ly, p2);
+			
+		}
+		
+		
 		
 		x_spacing = (float)w/(float)gameWidth;
 		y_spacing = (float)h/(float)gameHeight;
@@ -76,23 +170,44 @@ public class gameView extends View
 		{
 			for(int j = 0; j < gameHeight; j++)
 			{
-				int r = rotations[i][j];
-				int t = types[i][j];
 				Bitmap b = pipe;
-				if(t == 1) b = pipe_b;
-				m.reset();
+				if(pieces[i][j].type == 1) b = pipe_b;
 				
-				m.postRotate(90*r,b.getWidth()/2,b.getHeight()/2);
+				
+				m.reset();
+				m.postRotate(90*pieces[i][j].rotation,b.getWidth()/2,b.getHeight()/2);
 				m.postScale(x_spacing/b.getWidth(), y_spacing/b.getHeight());
 				m.postTranslate(i*x_spacing, j*y_spacing);
 				
 				g.drawBitmap(b, m, null);
 				
 				
+				
 			}
 		}
 		
-		g.drawText("w" + w + "h" + h + "xs"+ x_spacing + "ys" + y_spacing+ "    pw" + pipe.getWidth() + "     ph" + pipe.getHeight(),20,20,p);
+		
+		g.drawRect(0,h,w*(timeLeft/timeMax),h+80, p3);
+		g.drawText("Score:" + score, 0, h+80, p);
+		
+		postInvalidate();
+		time ++;
+		timeLeft-= 0.1f;
+		if(timeLeft <= 0) loseRound();
+		
+	}
+	
+	private void winRound()
+	{
+		score += timeLeft;
+		timeLeft = 150;
+		//genNewBoard();
+	}
+	
+	private void loseRound()
+	{
+		
+		// Do shit...
 		
 	}
 	
@@ -105,10 +220,13 @@ public class gameView extends View
 		int iy = (int)(event.getY()/y_spacing);
 		
 		if(ix < 0 || ix >= gameWidth || iy < 0 || iy >= gameHeight) return false;
-		rotations[ix][iy] = (rotations[ix][iy]+1)%4; 
+		pieces[ix][iy].rotation = (pieces[ix][iy].rotation+1)%4; 
+		board.gameBoard[ix][iy].value = sanityToCrazy(pieces[ix][iy]);
 
 		this.postInvalidate();
-		Log.d("ROTATE","ix:" + ix + "iy:" + iy + "value:" + rotations[ix][iy]);
+		
+		//if(board.checkIfCorrect())
+			winRound();
 		
 		return true;
 	}

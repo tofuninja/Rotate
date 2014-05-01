@@ -30,4 +30,21 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/com/example/rotate/Board.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/cs252%20Rotate%20Game/src/Board.java</locationURI>
+		</link>
+		<link>
+			<name>src/com/example/rotate/Game.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/cs252%20Rotate%20Game/src/Game.java</locationURI>
+		</link>
+		<link>
+			<name>src/com/example/rotate/Point.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/cs252%20Rotate%20Game/src/Point.java</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
