@@ -71,7 +71,7 @@ public class gameBoard
 	/**
 	 * Performs a depth first search to find the end point.
 	 * Will construct a path to the end if found, else sets all other paths to random.
-	 * Rotation of pieces is always random.
+	 * Rotations of pieces is always random.
 	 * 
 	 * @param node The start node to search on
 	 * @param preNode The node just before that

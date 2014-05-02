@@ -31,7 +31,6 @@ public class gameView extends View
 	private int score = 0;
 	private float timeLeft = 150;
 	private float timeMax = 150;
-	private MainActivity main;
 	
 	static
 	{
@@ -44,10 +43,10 @@ public class gameView extends View
 	}
 	
 	
-	public gameView(Context context, MainActivity main) 
+	public gameView(Context context) 
 	{
 		super(context);
-		this.main = main;
+		
 		
 		pipe = BitmapFactory.decodeResource(getResources(), R.drawable.pipe);
 		pipe_b = BitmapFactory.decodeResource(getResources(), R.drawable.pipe_b);
@@ -82,9 +81,10 @@ public class gameView extends View
 	 */
 	private void loseRound()
 	{
-		main.setContentView(R.layout.game_loss_scree);
+		
+		// Do shit...
+		
 	}
-	
 	
 	
 	@Override

@@ -82,9 +82,10 @@ public class gameView extends View
 	 */
 	private void loseRound()
 	{
+		
 		main.setContentView(R.layout.game_loss_scree);
+		
 	}
-	
 	
 	
 	@Override

@@ -19,8 +19,6 @@ import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
 
-	int currentView = 0;
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,58 +33,27 @@ public class MainActivity extends ActionBarActivity {
         
         
         
-        // Set play button stuff
+        // Set button stuff
+        
         Button button = (Button) findViewById(R.id.button_play);
-        final MainActivity me = this;
+        
+        
+        
         button.setOnClickListener(new OnClickListener()
         {
           public void onClick(View v)
           {
-        	  currentView = 1;
+        	  // doStuff
         	  setContentView(R.layout.gamescreen);
         	  FrameLayout gameLayout = (FrameLayout) findViewById(R.id.game_layout);
-        	  gameLayout.removeAllViews();
-        	  gameLayout.addView(new gameView(getApplicationContext(), me));
+        	  gameLayout.addView(new gameView(getApplicationContext()));
           }
         });
         
-        // Set high score button stuff
-        button = (Button) findViewById(R.id.button_score);
-        button.setOnClickListener(new OnClickListener()
-        {
-          public void onClick(View v)
-          {
-        	  /*
-        	   * Do stuff here
-        	   */
-          }
-        });
         
-        // Set exit button stuff
-        button = (Button) findViewById(R.id.button_exit);
-        button.setOnClickListener(new OnClickListener()
-        {
-          public void onClick(View v)
-          {
-        	  finish();
-          }
-        });
         
     }
 
-    
-    @Override
-	public void onBackPressed() {
-	    if(currentView == 1)
-	    {
-	    	currentView = 0;
-	    	setContentView(R.layout.activity_main);
-	    }
-	    else if(currentView == 0)
-	    {
-	    	finish();
-	    }
-	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
