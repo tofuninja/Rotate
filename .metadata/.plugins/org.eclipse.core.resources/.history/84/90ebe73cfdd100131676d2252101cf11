@@ -24,18 +24,16 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
         
-        goToMainMenu();
-    }
-    
-    public void goToMainMenu()
-    {
-    	setContentView(R.layout.activity_main);
+        
+        
         
         // Set play button stuff
         Button button = (Button) findViewById(R.id.button_play);
@@ -73,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
         	  finish();
           }
         });
+        
     }
 
     
@@ -81,7 +80,7 @@ public class MainActivity extends ActionBarActivity {
 	    if(currentView == 1)
 	    {
 	    	currentView = 0;
-	    	goToMainMenu();
+	    	setContentView(R.layout.activity_main);
 	    }
 	    else if(currentView == 0)
 	    {

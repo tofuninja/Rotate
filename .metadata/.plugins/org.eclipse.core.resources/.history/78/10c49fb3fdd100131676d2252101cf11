@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
         {
           public void onClick(View v)
           {
+        	  Log.d("ROTATE","play");
         	  currentView = 1;
         	  setContentView(R.layout.gamescreen);
         	  FrameLayout gameLayout = (FrameLayout) findViewById(R.id.game_layout);
