@@ -1,0 +1,242 @@
+package com.example.rotate;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
+import android.util.Log;
+
+public class gameBoard 
+{
+	public gamePiece[][] array;
+	public int w;
+	public int h;
+	private gamePiece end;
+	private gamePiece start;
+	private Random rand;
+	
+	private static int[] xRot;
+	private static int[] yRot;
+	
+	static
+	{
+		xRot = new int[4];
+		yRot = new int[4];
+		
+		xRot[0] =  0; yRot[0] = -1;
+		xRot[1] =  1; yRot[1] =  0;
+		xRot[2] =  0; yRot[2] =  1;
+		xRot[3] = -1; yRot[3] =  0;
+	}
+	
+	
+	public gameBoard(int width, int height)
+	{
+		w = width;
+		h = height;
+		array = new gamePiece[w][h];
+		rand = new Random();
+		
+		for(int i = 0; i < w; i++)
+		{
+			for(int j = 0; j < h; j++)
+			{
+				array[i][j] = new gamePiece(0,0,i,j);
+			}
+		}
+		
+		start = new gamePiece(0, 0, 0, -1);
+		end = new gamePiece(0, 0, w - 1, h);
+		boolean b = dfsMaze(array[0][0], start);
+		if(b == false) Log.e("ROTATE", "Some how did not find end... thats not right...");
+	}
+	
+
+	/**
+	 * Performs a depth first search to find the end point.
+	 * Will construct a path to the end if found, else sets all other paths to random.
+	 * Rotations of pieces is always random.
+	 * 
+	 * @param node The start node to search on
+	 * @param preNode The node just before that
+	 * @return Returns true if led to end
+	 */
+	private boolean dfsMaze(gamePiece node, gamePiece preNode)
+	{
+		if(node.marked) return false;
+		node.marked = true;
+		if(node == end) return true;
+		
+		ArrayList<gamePiece> neigh = getNeighbors(node);
+		Collections.shuffle(neigh);
+		
+		gamePiece nextNode = null;
+		
+		// Check all neighbors to see if they lead to the end... 
+		for(gamePiece p: neigh)
+		{
+			boolean found = dfsMaze(p, node);
+			if(found)
+			{
+				nextNode = p;
+			}
+		}
+		
+		
+		// didn't find end
+		if(nextNode == null) 
+		{
+			node.type = rand.nextInt(2);
+			node.rotation = rand.nextInt(4);
+			return false;
+		}
+		
+		// found end.. construct path to end
+		if(preNode.X == nextNode.X || preNode.Y == nextNode.Y)
+			node.type = 0;
+		else
+			node.type = 1;
+		
+		
+		node.rotation = rand.nextInt(4);
+		return true;
+	}
+	
+	/**
+	 * Checks if the current state of the board is solved
+	 * @return Returns true if solved
+	 */
+	public boolean verifyBoard()
+	{
+		return findToEnd(array[0][0], start);
+	}
+	
+	private boolean findToEnd(gamePiece node, gamePiece pre)
+	{
+		if(node == end) return true;
+		if(node == null) return false;
+		
+		gamePiece ent = getEntrence(node);
+		gamePiece ext = getExit(node);
+		
+		if(ext == pre) // flip em..
+		{
+			gamePiece tmp =  ent;
+			ent = ext;
+			ext = tmp;
+		}
+		
+		if(ent != pre) // they don't line up...
+			return false;
+		
+		// Check exit... 
+		return findToEnd(ext, node);
+	}
+	
+	/**
+	 * Gets the neighbors of a game piece
+	 * Will not return marked neighbors
+	 * @param p
+	 * @return An array list of all the neighbors
+	 */
+	private ArrayList<gamePiece> getNeighbors(gamePiece p)
+	{
+		ArrayList<gamePiece> arr = new ArrayList<gamePiece>();
+		
+		gamePiece top = getPiece(p.X, p.Y - 1);
+		gamePiece right = getPiece(p.X + 1, p.Y);
+		gamePiece bot = getPiece(p.X, p.Y + 1);
+		gamePiece left = getPiece(p.X - 1, p.Y);
+		
+		if(top   != null && top.marked   == false) arr.add(top);
+		if(right != null && right.marked == false) arr.add(right);
+		if(bot   != null && bot.marked   == false) arr.add(bot);
+		if(left  != null && left.marked  == false) arr.add(left);
+		
+		return arr;
+	}
+	
+	/**
+	 * Gets the entrance of p based on rotation, type and location
+	 * @param p
+	 * @return
+	 */
+	private gamePiece getEntrence(gamePiece p)
+	{
+		int rot = p.rotation;
+		if(p.type == 1) rot = (rot + 1)%4;
+		int nx = p.X + xRot[rot];
+		int ny = p.Y + yRot[rot];
+		return getPiece(nx, ny);
+	}
+	
+	/**
+	 * Gets the exit of p based on rotation, type and location
+	 * @param p
+	 * @return
+	 */
+	private gamePiece getExit(gamePiece p)
+	{
+		int rot = p.rotation;
+		rot = (rot + 2)%4;
+		int nx = p.X + xRot[rot];
+		int ny = p.Y + yRot[rot];
+		return getPiece(nx, ny);
+	}
+	
+	/**
+	 * Gets the gamePiece from its x and y
+	 * @param x
+	 * @param y
+	 * @return The piece at location x,y
+	 */
+	public gamePiece getPiece(int x, int y)
+	{
+		if(x == 0 && y == -1)
+			return start;
+		else if(x == w-1 && y == h) 
+			return end;
+		else if(x >= 0 && x < w && y >= 0 && y < h)
+			return array[x][y];
+		else 
+			return null;
+	}
+	
+}
+
+/**
+ * The pipes on the board
+ */
+class gamePiece
+{
+	/**
+	 * The type of pipe
+	 * 0 = strait pipe
+	 * 1 = bent pipe
+	 */
+	public int type;
+	
+	/**
+	 * The rotation of the pipe
+	 * The real angle of rotation in degrees is found by rotation*90
+	 */
+	public int rotation;
+	public boolean marked = false;
+	
+	/**
+	 * X location on board
+	 */
+	public int X;
+	
+	/**
+	 * Y location on board
+	 */
+	public int Y;
+	public gamePiece(int t, int r, int x, int y)
+	{
+		type = t;
+		rotation = r;
+		X = x;
+		Y = y;
+	}
+}

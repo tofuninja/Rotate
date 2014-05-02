@@ -1,0 +1,57 @@
+package com.example.rotate;
+
+public class gameBoard 
+{
+	private gamePiece[][] array;
+	private int w;
+	private int h;
+	private gamePiece end;
+	
+	public gameBoard(int width, int height)
+	{
+		w = width;
+		h = height;
+	}
+	
+	
+	private void dfsMazeEndSearch()
+	{
+		
+	}
+	
+	private void getNeighbors(int x, int y)
+	{
+		
+	}
+	
+	
+	public boolean setPiece(int x, int y, gamePiece p)
+	{
+		array[x][y] = p;
+		
+		return false;
+	}
+	
+	public gamePiece getPiece(int x, int y)
+	{
+		if(x == w-1 && y == h) 
+			return end;
+		else if(x >= 0 && x < w && y >= 0 && y < h)
+			return array[x][y];
+		else 
+			return null;
+	}
+	
+}
+
+class gamePiece
+{
+	public int type;
+	public int rotation;
+	public boolean marked = false;
+	public gamePiece(int t, int r)
+	{
+		type = t;
+		rotation = r;
+	}
+}
