@@ -4,42 +4,27 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-public class coolView extends Drawable
+public class whiteBackBoarder extends Drawable
 {
-	private int time = 0;
+	private static Paint p1 = new Paint();
 	private static Paint p2 = new Paint();
 	
 	static
 	{
-		p2.setColor(Color.DKGRAY);
-	}
-	
-	public coolView() {
+		p1.setColor(Color.BLACK);
+		p2.setColor(Color.WHITE);
 	}
 
 	@Override
 	public void draw(Canvas g) {
 		int w = g.getWidth();
 		int h = g.getHeight();
-		g.drawRGB(0,0,0);
-		
-		float lx = (float)(Math.cos(0)*400 + 300*Math.cos(0)) + w/2;
-		float ly = (float)(Math.sin(0)*400 + 300*Math.sin(0)) + h/2;
-		for(int i = 0; i < 1000; i++)
-		{
-			float px = lx;
-			float py = ly;
-			lx = (float)(Math.cos(i/100.0)*600 + 600*Math.cos(i*Math.sin(time/200.0)*5)) + w/2;
-			ly = (float)(Math.sin(i/100.0)*600 + 600*Math.sin(i*Math.sin(time/200.0)*5)) + h/2;
-			g.drawLine(px, py, lx, ly, p2);
-			
-		}
-		
-		this.invalidateSelf();
-		time ++;
+		g.drawRoundRect(new RectF(0, 0, w, h), 15, 15, p1);
+		g.drawRoundRect(new RectF(1, 1, w-1, h-1), 15, 15, p2);
 	}
 
 	@Override

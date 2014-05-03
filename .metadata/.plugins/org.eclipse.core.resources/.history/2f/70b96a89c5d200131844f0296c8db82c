@@ -1,0 +1,44 @@
+package com.example.rotate;
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+public class whiteBackBoarder extends Drawable
+{
+	private static Paint p1 = new Paint();
+	
+	static
+	{
+		p1.setColor(Color.BLACK);
+	}
+
+	@Override
+	public void draw(Canvas g) {
+		int w = g.getWidth();
+		int h = g.getHeight();
+		g.drawRGB(255,255,255);
+		
+	}
+
+	@Override
+	public int getOpacity() {
+		// TODO Auto-generated method stub
+		return 255;
+	}
+
+	@Override
+	public void setAlpha(int alpha) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setColorFilter(ColorFilter cf) {
+		// TODO Auto-generated method stub
+		
+	}
+}

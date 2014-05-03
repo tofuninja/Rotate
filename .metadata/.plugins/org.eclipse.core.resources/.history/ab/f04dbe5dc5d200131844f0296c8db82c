@@ -23,8 +23,9 @@ public class coolView extends Drawable
 	@Override
 	public void draw(Canvas g) {
 		int w = g.getWidth();
-		int h = g.getHeight();
+		int h = g.getHeight()-80;
 		g.drawRGB(0,0,0);
+		Log.d("ROTATE","w:" + w + "h:" + h);
 		
 		float lx = (float)(Math.cos(0)*400 + 300*Math.cos(0)) + w/2;
 		float ly = (float)(Math.sin(0)*400 + 300*Math.sin(0)) + h/2;

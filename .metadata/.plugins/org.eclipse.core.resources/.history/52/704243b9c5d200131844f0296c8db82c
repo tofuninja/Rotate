@@ -152,7 +152,6 @@ public class MainActivity extends Activity {
     	v.setBackgroundDrawable(new coolView());
     	String top10 = SQLconnector.getTop10Players();
     	TextView top_10_box = (TextView)findViewById(R.id.text_top_10);
-    	top_10_box.setBackgroundDrawable(new whiteBackBoarder());
     	top_10_box.setText(top10);
     	
     	// Set main menu button stuff
