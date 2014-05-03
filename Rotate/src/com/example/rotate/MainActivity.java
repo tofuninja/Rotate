@@ -1,5 +1,8 @@
 package com.example.rotate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,10 +17,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.os.Build;
+import android.preference.EditTextPreference;
 
 public class MainActivity extends Activity {
 
@@ -36,6 +42,9 @@ public class MainActivity extends Activity {
         goToMainMenu();
     }
     
+    /**
+     * Goto the main menu
+     */
     public void goToMainMenu()
     {
     	currentView = 0;
@@ -60,9 +69,7 @@ public class MainActivity extends Activity {
         {
           public void onClick(View v)
           {
-        	  /*
-        	   * Do stuff here
-        	   */
+        	  goToHighScoreScreen();
           }
         });
         
@@ -77,21 +84,37 @@ public class MainActivity extends Activity {
         });
     }
     
-    public void goToLoss()
+    /**
+     * Go to the loss screen
+     * @param Score The score from the previous game
+     */
+    public void goToLoss(int Score)
     {
     	currentView = 2;
     	setContentView(R.layout.game_loss_scree);
     	View v = findViewById(R.id.loss_layout);
     	v.setBackgroundDrawable(new coolView());
     	
+    	TextView score_box = (TextView)findViewById(R.id.text_score);
+    	score_box.setText("Score:" + Score );
     	
     	// Set submit button stuff
         Button button = (Button) findViewById(R.id.button_submit);
+        final int f_score = Score;
         button.setOnClickListener(new OnClickListener()
         {
           public void onClick(View v)
           {
-        	  
+        	  EditText txt = (EditText)findViewById(R.id.text_name);
+        	  String name = txt.getText().toString().trim();
+        	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	  Date now = new Date();
+        	  String date = sdf.format(now);
+        	  if(!name.equals(""))
+        	  {
+        		  SQLconnector.createNewPlayer(name, f_score, date);
+        		  goToHighScoreScreen();
+        	  }
           }
         });
         
@@ -106,7 +129,9 @@ public class MainActivity extends Activity {
         });
     }
     
-    
+    /**
+     * Go to the main game screen
+     */
     public void goToGameScreen()
     {
     	currentView = 1;
@@ -116,6 +141,20 @@ public class MainActivity extends Activity {
 		gameLayout.addView(new gameView(getApplicationContext(), this));
     }
 
+    /**
+     * Go to the high score screen
+     */
+    public void goToHighScoreScreen()
+    {
+    	currentView = 3;
+    	setContentView(R.layout.high_score_screen);
+    	View v = findViewById(R.id.high_score_layout);
+    	v.setBackgroundDrawable(new coolView());
+    	String top10 = SQLconnector.getTop10Players();
+    	TextView top_10_box = (TextView)findViewById(R.id.text_top_10);
+    	top_10_box.setText(top10);
+    	
+    }
     
     @Override
 	public void onBackPressed() {

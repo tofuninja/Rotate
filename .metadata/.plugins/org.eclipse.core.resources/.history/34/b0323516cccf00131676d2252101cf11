@@ -1,7 +1,0 @@
-package com.example.rotate;
-
-import View;
-
-public class gameView extends View {
-
-}

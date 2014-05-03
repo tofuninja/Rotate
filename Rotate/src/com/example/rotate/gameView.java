@@ -84,7 +84,7 @@ public class gameView extends View
 	 */
 	private void loseRound()
 	{
-		main.goToLoss();
+		main.goToLoss(score);
 	}
 	
 	

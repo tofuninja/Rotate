@@ -1,9 +1,7 @@
 package com.example.rotate;
 
 import java.io.*;
-import java.nio.file.*;
 import java.sql.*;
-import java.util.*;
 
 public class SQLconnector{
 
@@ -40,7 +38,7 @@ public class SQLconnector{
 			stat.executeUpdate("INSERT INTO HighScore VALUES (\"" + name + "\", \"" + totalScore + "\", \"" + date + "\");");
 
 		} catch (Exception e) {e.printStackTrace();}
-		try { conn.close();} catch (SQLException e) {e.printStackTrace();}
+		try { conn.close();} catch (Exception e) {e.printStackTrace();}
 
 	}
 
@@ -75,8 +73,8 @@ public class SQLconnector{
 			}
 
 			//System.out.println(message);
-		} catch (Exception e) {}
-		try { conn.close();} catch (SQLException e) {e.printStackTrace();}
+		} catch (Exception e) {return "Could Not Get Top 10";}
+		try { conn.close();} catch (Exception e) {return "Could Not Get Top 10";}
 		return message.toString();
 	}
 
