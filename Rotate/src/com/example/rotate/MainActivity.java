@@ -3,6 +3,7 @@ package com.example.rotate;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.os.Build;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
 	int currentView = 0;
 	
@@ -25,9 +27,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
+        	/*
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+                    .commit();*/
         }
         
         goToMainMenu();
@@ -35,20 +38,19 @@ public class MainActivity extends ActionBarActivity {
     
     public void goToMainMenu()
     {
+    	currentView = 0;
     	setContentView(R.layout.activity_main);
+    	
+    	View v = findViewById(R.id.main_layout);
+    	v.setBackgroundDrawable(new coolView());
         
         // Set play button stuff
         Button button = (Button) findViewById(R.id.button_play);
-        final MainActivity me = this;
         button.setOnClickListener(new OnClickListener()
         {
           public void onClick(View v)
           {
-        	  currentView = 1;
-        	  setContentView(R.layout.gamescreen);
-        	  FrameLayout gameLayout = (FrameLayout) findViewById(R.id.game_layout);
-        	  gameLayout.removeAllViews();
-        	  gameLayout.addView(new gameView(getApplicationContext(), me));
+        	  goToGameScreen();
           }
         });
         
@@ -74,13 +76,51 @@ public class MainActivity extends ActionBarActivity {
           }
         });
     }
+    
+    public void goToLoss()
+    {
+    	currentView = 2;
+    	setContentView(R.layout.game_loss_scree);
+    	View v = findViewById(R.id.loss_layout);
+    	v.setBackgroundDrawable(new coolView());
+    	
+    	
+    	// Set submit button stuff
+        Button button = (Button) findViewById(R.id.button_submit);
+        button.setOnClickListener(new OnClickListener()
+        {
+          public void onClick(View v)
+          {
+        	  
+          }
+        });
+        
+        // Set main menu button stuff
+        button = (Button) findViewById(R.id.button_menu);
+        button.setOnClickListener(new OnClickListener()
+        {
+          public void onClick(View v)
+          {
+        	  goToMainMenu();
+          }
+        });
+    }
+    
+    
+    public void goToGameScreen()
+    {
+    	currentView = 1;
+		setContentView(R.layout.gamescreen);
+		FrameLayout gameLayout = (FrameLayout) findViewById(R.id.game_layout);
+		gameLayout.removeAllViews();
+		gameLayout.addView(new gameView(getApplicationContext(), this));
+    }
 
     
     @Override
 	public void onBackPressed() {
-	    if(currentView == 1)
+	    if(currentView != 0)
 	    {
-	    	currentView = 0;
 	    	goToMainMenu();
 	    }
 	    else if(currentView == 0)

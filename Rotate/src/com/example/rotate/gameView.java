@@ -32,6 +32,7 @@ public class gameView extends View
 	private float timeLeft = 150;
 	private float timeMax = 150;
 	private MainActivity main;
+	int w = 5; int h = 9;
 	
 	static
 	{
@@ -39,7 +40,7 @@ public class gameView extends View
 		p2.setColor(Color.DKGRAY);
 		p.setColor(Color.WHITE);
 		p.setTextSize(100);
-		p3.setColor(Color.rgb(100, 100, 255));
+		p3.setColor(Color.argb(150,100, 100, 255));
 		p3.setStyle(Paint.Style.FILL);
 	}
 	
@@ -63,7 +64,8 @@ public class gameView extends View
 	 */
 	private void genNewBoard()
 	{
-		int w = 5; int h = 9;
+		w++;
+		h++;
 		board = new gameBoard(w, h);
 	}
 	
@@ -82,7 +84,7 @@ public class gameView extends View
 	 */
 	private void loseRound()
 	{
-		main.setContentView(R.layout.game_loss_scree);
+		main.goToLoss();
 	}
 	
 	

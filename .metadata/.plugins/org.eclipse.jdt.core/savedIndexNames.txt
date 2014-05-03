@@ -4,5 +4,4 @@ INDEX VERSION 1.126+C:\Users\Snuffy\Documents\GitHub\Rotate\.metadata\.plugins\o
 1284074322.index
 1375950002.index
 2066576508.index
-4177439268.index
 3871394155.index
