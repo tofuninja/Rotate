@@ -154,16 +154,6 @@ public class MainActivity extends Activity {
     	TextView top_10_box = (TextView)findViewById(R.id.text_top_10);
     	top_10_box.setText(top10);
     	
-    	// Set main menu button stuff
-        Button button = (Button) findViewById(R.id.button_main_menu_from_score);
-        button.setOnClickListener(new OnClickListener()
-        {
-          public void onClick(View v)
-          {
-        	  goToMainMenu();
-          }
-        });
-    	
     }
     
     @Override
