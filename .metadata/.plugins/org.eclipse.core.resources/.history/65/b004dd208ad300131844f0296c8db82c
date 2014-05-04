@@ -6,7 +6,6 @@ import java.util.Date;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
-import android.text.method.ScrollingMovementMethod;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -155,8 +154,6 @@ public class MainActivity extends Activity {
     	TextView top_10_box = (TextView)findViewById(R.id.text_top_10);
     	top_10_box.setBackgroundDrawable(new whiteBackBoarder());
     	top_10_box.setText(top10);
-    	top_10_box.setHorizontallyScrolling(true);
-    	top_10_box.setMovementMethod(new ScrollingMovementMethod());
     	
     	// Set main menu button stuff
         Button button = (Button) findViewById(R.id.button_main_menu_from_score);
