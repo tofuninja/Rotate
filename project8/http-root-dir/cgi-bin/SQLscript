@@ -1,0 +1,4 @@
+#!/bin/sh
+echo Content-type: text/plain
+echo
+java -cp .:mysql-connector-java-5.1.22-bin.jar SQLconnector $QUERY_STRING
