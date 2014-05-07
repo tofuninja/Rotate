@@ -33,6 +33,7 @@ public class gameView extends View
 	private float timeMax = 150;
 	private MainActivity main;
 	int w = 5; int h = 9;
+	int offset = 60;
 	
 	static
 	{
@@ -94,7 +95,7 @@ public class gameView extends View
 		if(event.getAction() != MotionEvent.ACTION_DOWN) return false;
 		
 		int ix = (int)(event.getX()/x_spacing);
-		int iy = (int)(event.getY()/y_spacing);
+		int iy = (int)((event.getY()-offset)/y_spacing);
 		
 		if(ix < 0 || ix >= board.w || iy < 0 || iy >= board.h) return false;
 		
@@ -139,7 +140,7 @@ public class gameView extends View
 		
 		
 		x_spacing = (float)w/(float)board.w;
-		y_spacing = (float)h/(float)board.h;
+		y_spacing = (float)(h-offset)/(float)board.h;
 		
 		for(int i = 0; i < board.w; i++)
 		{
@@ -152,7 +153,7 @@ public class gameView extends View
 				m.reset();
 				m.postRotate(90*board.array[i][j].rotation,b.getWidth()/2,b.getHeight()/2);
 				m.postScale(x_spacing/b.getWidth(), y_spacing/b.getHeight());
-				m.postTranslate(i*x_spacing, j*y_spacing);
+				m.postTranslate(i*x_spacing, j*y_spacing + offset);
 				
 				g.drawBitmap(b, m, null);
 				
@@ -160,6 +161,16 @@ public class gameView extends View
 				
 			}
 		}
+		
+		m.reset();
+		m.postScale(x_spacing/pipe.getWidth(), y_spacing/pipe.getHeight());
+		m.postTranslate(0, -1*y_spacing + offset);
+		g.drawBitmap(pipe, m, null);
+		
+		m.reset();
+		m.postScale(x_spacing/pipe.getWidth(), y_spacing/pipe.getHeight());
+		m.postTranslate((board.w-1)*x_spacing, (board.h)*y_spacing + offset);
+		g.drawBitmap(pipe, m, null);
 		
 		
 		g.drawRect(0,h,w*(timeLeft/timeMax),h+80, p3);

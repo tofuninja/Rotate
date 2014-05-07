@@ -1,82 +1,95 @@
 package com.example.rotate;
 
 import java.io.*;
-import java.sql.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
 
 public class SQLconnector{
-
-	private static Connection getConnection() throws SQLException, IOException
-	{
-		/*Properties props = new Properties();
-		FileInputStream in = new FileInputStream("C:/Users/chen1123/workspace/SQLconnector/src/database.properties");
-		System.out.println("C:/Users/chen1123/workspace/SQLconnector/src");
-		System.out.println(Paths.get("").toAbsolutePath().toString());
-		props.load(in);
-		in.close();
-
-		String drivers = props.getProperty("jdbc.drivers");
-		if (drivers != null)
-			System.setProperty("jdbc.drivers", drivers);
-		String url = props.getProperty("jdbc.url");
-		String username = props.getProperty("jdbc.username");
-		String password = props.getProperty("jdbc.password");
-
-		System.out.println("url="+url+" user="+username+" password="+password);
-		 */
-		String url = "jdbc:mysql://mydb.itap.purdue.edu:3306/chen1123";
-		String username = "chen1123";
-		String password = "131131";
-		return DriverManager.getConnection( url, username, password);
-	}
-
+	
+	private static String url = "http://sslab02.cs.purdue.edu:5544/cgi-bin/SQLscript";
+	//private static String url = "http://www.google.com";
+	
+	
 	public static void createNewPlayer (String name, int totalScore, String date) {
-		Connection conn = null;
-		try {
-			conn = getConnection();
-			Statement stat = conn.createStatement();
-			//ResultSet result = stat.executeQuery("SELECT * FROM HighScore WHERE name=\"" + name +"\";");
-			stat.executeUpdate("INSERT INTO HighScore VALUES (\"" + name + "\", \"" + totalScore + "\", \"" + date + "\");");
-
-		} catch (Exception e) {e.printStackTrace();}
-		try { conn.close();} catch (Exception e) {e.printStackTrace();}
-
+		try 
+		{
+			int l = name.length();
+			for(int i = 0; i < (10-l); i++)
+			{
+				name += "_";
+			}
+			
+			String totScoreString = ""+totalScore;
+			String pad = "";
+			
+			
+			for(int i = 0; i < (5-totScoreString.length()); i++)
+			{
+				pad += "_";
+			}
+			
+			
+			
+			String s = "?_" + name + "__." + totalScore + "._" + pad + date;
+			s = s.replace(' ' , '+');
+			s = s.replace('\n' , '+');
+			s = s.replace('\t' , '+');
+			
+			(new urlGetter()).execute(url + s);
+			
+		}
+		catch (Exception e) 
+		{
+			Log.e("ROTATE", e.toString());
+		}
 	}
-
-	public static void updatePlayer (String name, int totalScore, String date) {
-		Connection conn = null;
-		try {
-			conn = getConnection();
-			Statement stat = conn.createStatement();
-			stat.executeUpdate("UPDATE HighScore SET highscores=\"" + totalScore + "\" WHERE name=\"" + name + "\";");
-			stat.executeUpdate("UPDATE HighScore SET datecreated=\"" + date + "\" WHERE name=\"" + name + "\";");
-		} catch (Exception e) {e.printStackTrace();}
-		try { conn.close();} catch (SQLException e) {e.printStackTrace();}
-	}
-
 
 	public static String getTop10Players () {
-		Connection conn = null;
-		StringBuilder message = null;
-		try {
-			conn = getConnection ();
-			Statement stat = conn.createStatement();
-			ResultSet result = stat.executeQuery("SELECT * FROM HighScore ORDER BY HighScores DESC LIMIT 10");
+		try 
+		{
+			return (new urlGetter()).execute(url).get().replace('_', ' ');
 
-			int columns = result.getMetaData().getColumnCount();
-			message = new StringBuilder();
-
-			while (result.next()){
-				for (int i = 1; i <= columns; i++) {
-					message.append(result.getString(i) + " ");
-				}
-				message.append("\n");
-			}
-
-			//System.out.println(message);
-		} catch (Exception e) {return "Could Not Get Top 10";}
-		try { conn.close();} catch (Exception e) {return "Could Not Get Top 10";}
-		return message.toString();
+		}
+		catch (Exception e) 
+		{
+			Log.e("ROTATE", e.toString());
+			return "Connection error";
+		}
 	}
 
 
 }
+
+
+class urlGetter extends AsyncTask<String, Void, String>
+	{
+
+		@Override
+		protected String doInBackground(String... params) 
+		{
+			try 
+			{
+				URL web = new URL(params[0]);
+				
+				BufferedReader in = new BufferedReader(new InputStreamReader(web.openStream()));
+	
+				String page = "";
+				String inputLine;
+				while ((inputLine = in.readLine()) != null)
+					page += inputLine + "\n";
+				
+				in.close();
+				
+				return page;
+			} 
+			catch (Exception e) 
+			{
+				return "Connection Error";
+			}
+		}
+		
+	}

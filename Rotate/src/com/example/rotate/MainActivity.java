@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
                     .commit();*/
         }
         
+        
         goToMainMenu();
     }
     
@@ -108,7 +109,7 @@ public class MainActivity extends Activity {
           {
         	  EditText txt = (EditText)findViewById(R.id.text_name);
         	  String name = txt.getText().toString().trim();
-        	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	  SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
         	  Date now = new Date();
         	  String date = sdf.format(now);
         	  if(!name.equals(""))
@@ -155,8 +156,8 @@ public class MainActivity extends Activity {
     	TextView top_10_box = (TextView)findViewById(R.id.text_top_10);
     	top_10_box.setBackgroundDrawable(new whiteBackBoarder());
     	top_10_box.setText(top10);
-    	top_10_box.setHorizontallyScrolling(true);
-    	top_10_box.setMovementMethod(new ScrollingMovementMethod());
+    	//top_10_box.setHorizontallyScrolling(true);
+    	//top_10_box.setMovementMethod(new ScrollingMovementMethod());
     	
     	// Set main menu button stuff
         Button button = (Button) findViewById(R.id.button_main_menu_from_score);

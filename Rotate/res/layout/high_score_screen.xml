@@ -24,13 +24,16 @@
             android:id="@+id/text_top_10"
             android:layout_width="250dp"
             android:layout_height="400dp"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:lineSpacingExtra="16dp"
             android:scrollbars="horizontal"
             android:text="1\n2\n2\n3\n4\n5\n6\n7\n8\n9\n10"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ff0000"
-            android:textSize="30sp" />
+            android:textSize="20sp"
+            android:typeface="monospace" />
 
         <Button
             android:id="@+id/button_main_menu_from_score"
